@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import jsonify
-app = Flask("tripPlannerp")
+app = Flask("tripPlanner")
 
 @app.route("/")
 def tripPlanner():
@@ -34,4 +34,4 @@ def receiveDestination():
 	print(response.text)
 
 	return jsonify({"answer":response.text})
-app.run()
+#app.run()

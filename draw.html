@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+	
+</head>
+<body>
+	<input id = "Brush size" type = "number">
+		
+	</input>
+	<canvas id="Her Canvas" width="600" height="600">
+		
+	</canvas>
+	<script>
+		let mycanvas = document.getElementById("Her Canvas")
+		let input = document.getElementById("Brush size")
+		let pen = mycanvas.getContext("2d")
+		pen.fillStyle = 'Black'
+		pen.fillRect(0,0,600,600)
+		let isdrawing= false
+		function mousedowntrigger(mousehint)
+		{
+			console.log("Someone clicked")
+			isdrawing = true
+			pen.moveTo(mousehint.clientX,mousehint.clientY)
+			pen.beginPath()
+		}
+		function mousemovetrigger(mousehint)
+		{
+			console.log("Someone dragged")
+			if(isdrawing == true)
+			{
+				pen.strokeStyle = 'white'
+				pen.lineTo(mousehint.clientX, mousehint.clientY)
+				pen.stroke()
+			}
+		
+		}
+		function mouseuptrigger(mousehint)
+		{
+			isdrawing = false
+		}
+		function inputtrigger(mousehint)
+		{
+			pen.lineWidth = input.value
+		}
+		mycanvas.addEventListener("mousedown",mousedowntrigger)
+		mycanvas.addEventListener("mousemove",mousemovetrigger)
+		mycanvas.addEventListener("mouseup",mouseuptrigger)
+		input.addEventListener("input", inputtrigger)
+
+
+
+	</script>
+</body>
+</html>
+
+
+
+

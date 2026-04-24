@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trip Planner</title>
+  <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+
+      /* pastel pink travel photo background */
+      background-image:
+        linear-gradient(135deg, rgba(255,182,193,0.72) 0%, rgba(255,218,224,0.65) 50%, rgba(255,240,245,0.75) 100%),
+        url('https://images.unsplash.com/photo-1499856871958-5b9357976b82?w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 3rem 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 2.4rem;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .header .icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.4rem;
+      display: block;
+      filter: drop-shadow(0 2px 6px rgba(200,80,110,0.25));
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 600;
+      color: #7a3050;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+      text-shadow: 0 2px 12px rgba(200,80,110,0.15);
+    }
+
+    .header h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: #c0607a;
+    }
+
+    .header p {
+      margin-top: 0.7rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c0607a;
+      opacity: 0.85;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(255, 245, 248, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,182,193,0.55);
+      border-radius: 24px;
+      padding: 2.8rem 2.8rem 3rem;
+      width: 100%;
+      max-width: 500px;
+      box-shadow:
+        0 8px 32px rgba(200,80,110,0.12),
+        0 2px 8px rgba(200,80,110,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      animation: fadeUp 0.7s 0.15s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* floating petal blobs */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(255,182,193,0.45) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -50px; left: -50px;
+      width: 150px; height: 150px;
+      background: radial-gradient(circle, rgba(255,210,220,0.4) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #7a3050;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.2rem;
+    }
+
+    .card-sub {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c0607a;
+      margin-bottom: 1.8rem;
+    }
+
+    hr {
+      border: none;
+      height: 1.5px;
+      background: linear-gradient(90deg, #f2b8c6, rgba(255,182,193,0.2));
+      margin-bottom: 2rem;
+    }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 1.3rem; }
+
+    label {
+      display: block;
+      font-size: 0.67rem;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #b06070;
+      margin-bottom: 0.45rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      background: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(240,176,192,0.6);
+      border-radius: 12px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.94rem;
+      font-weight: 300;
+      color: #5a2a3a;
+      outline: none;
+      transition: border-color 0.22s, box-shadow 0.22s, background 0.22s;
+    }
+
+    input::placeholder { color: #c090a0; opacity: 0.7; }
+
+    input:focus {
+      background: rgba(255,255,255,0.92);
+      border-color: #e08090;
+      box-shadow: 0 0 0 3.5px rgba(240,160,176,0.25);
+    }
+
+    /* ── Button ── */
+    .btn {
+      width: 100%;
+      margin-top: 0.8rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #e07090 0%, #f5a8bc 100%);
+      border: none;
+      border-radius: 12px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 400;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(220,96,128,0.38);
+      transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(220,96,128,0.48);
+      filter: brightness(1.06);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    /* ── Spinner ── */
+    .spin-row {
+      display: none;
+      align-items: center;
+      gap: 0.9rem;
+      margin-top: 1.8rem;
+      color: #b06070;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .spin-row.show { display: flex; }
+
+    .loader {
+      width: 26px; height: 26px;
+      border: 2.5px solid rgba(240,176,192,0.5);
+      border-top-color: #e07090;
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Result box ── */
+    #boxxy {
+      display: none;
+      margin-top: 1.8rem;
+      background: rgba(255,240,245,0.75);
+      border-radius: 14px;
+      padding: 1.5rem 1.7rem;
+      border-left: 3px solid #f2b8c6;
+      font-size: 0.91rem;
+      line-height: 1.85;
+      color: #5a2a3a;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    #boxxy.show { display: block; }
+
+    #boxxy h1, #boxxy h2, #boxxy h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: #7a3050;
+      margin: 1rem 0 0.4rem;
+    }
+
+    #boxxy ul { padding-left: 1.3rem; }
+    #boxxy li { margin-bottom: 0.3rem; }
+    #boxxy strong { color: #c0607a; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 2.4rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(150,60,80,0.7);
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <span class="icon">🌸</span>
+    <h1>Trip <em>Planner</em></h1>
+    <p>Your personal travel companion</p>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Plan Your Journey</p>
+    <p class="card-sub">Tell us where you're headed</p>
+    <hr>
+
+    <div class="field">
+      <label for="currentLoc">Current Location</label>
+      <input id="currentLoc" placeholder="e.g. Nairobi">
+    </div>
+
+    <div class="field">
+      <label for="dest">Destination</label>
+      <input id="dest" placeholder="e.g. London">
+    </div>
+
+    <div class="field">
+      <label for="depTime">Departure Time</label>
+      <input id="depTime" placeholder="e.g. midnight, 8:00 pm">
+    </div>
+
+    <button class="btn" onclick="trigger()">✈ &nbsp; Plan My Trip</button>
+
+    <div class="spin-row" id="spinRow">
+      <span class="loader"></span>
+      <span>Crafting your itinerary…</span>
+    </div>
+
+    <div id="boxxy"></div>
+  </div>
+
+  <footer>🌸 &nbsp; Bon Voyage &nbsp; 🌸</footer>
+
+  <script>
+    async function trigger() {
+      const currentLoc = document.getElementById('currentLoc').value;
+      const dest       = document.getElementById('dest').value;
+      const depTime    = document.getElementById('depTime').value;
+      const box        = document.getElementById('boxxy');
+      const spinRow    = document.getElementById('spinRow');
+
+      spinRow.classList.add('show');
+      box.classList.remove('show');
+      box.innerHTML = '';
+
+      const form = new FormData();
+      form.append('currentLoc', currentLoc);
+      form.append('dest', dest);
+      form.append('depTime', depTime);
+
+      try {
+        const response  = await fetch('/receiveDestination', { method: 'POST', body: form });
+        const json      = await response.json();
+        const converter = new showdown.Converter();
+        box.innerHTML   = converter.makeHtml(json.answer);
+        box.classList.add('show');
+      } catch (e) {
+        box.innerHTML = '<p style="color:#c0392b;font-size:.88rem">Something went wrong — please try again.</p>';
+        box.classList.add('show');
+      } finally {
+        spinRow.classList.remove('show');
+      }
+    }
+  </script>
+</body> 
+</html>

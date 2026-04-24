@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+
+</head>
+
+<body>
+	<h1 id = "My number"></h1>
+	<button onclick = "add_number()" >Add</button>
+	<button onclick = "subtract_number()">Subtract</button>
+
+</body>
+
+<script>
+	console.log ("Mwende")
+	let number = 0
+	function add_number ()
+	{
+		number += 1
+		let h1 = document.getElementById("My number")
+		h1.textContent = number	
+
+	}
+	function subtract_number ()
+	{
+		number -=1
+		let h1 = document.getElementById("My number")
+		h1.textContent = number
+		h1.style = "background-color: pink; color : red"
+	}
+
+</script>
+
+</html>

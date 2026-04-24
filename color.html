@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+
+
+</head>
+
+<body>
+	<div id = "Box"style = "background-color : black;width:200px; height:200px;"></div>
+	<button onclick = "change_color('Angry')">Angry</button>
+	<button onclick = "change_color('Proud')">Proud</button>
+	<button onclick = "change_color('Proud')">Proud</button>
+	<button onclick = "change_color('Happy')">Happy</button>
+	<button onclick = "change_color('Calm')">Calm</button>
+	<button onclick = "change_color('Sad')">Sad</button>
+	<button onclick = "change_color('Mysterious')">Mysterious</button>
+	<button onclick = "change_color('Loving')">Loving</button>
+</body>
+
+<script>
+function change_color (mood)
+{
+	let box = document.getElementById("Box") 
+	if(mood == 'Angry')
+	{
+		box.style = "background-color: red;  width:200px; height:200px;"
+	}
+	if(mood == 'Proud')
+	{
+		box.style = "background-color: orange; width:200px; height:200px;"
+	}
+	if(mood == 'Happy')
+	{
+		box.style = "background-color: yellow; width:200px; height:200px;"
+	}
+	if(mood == 'Calm')
+	{
+		box.style = "background-color: green; width:200px; height:200px;"
+	}
+	if(mood == 'Sad')
+	{
+		box.style = "background-color: blue; width:200px; height:200px;"
+	}
+	if(mood == 'Mysterious')
+	{
+		box.style = "background-color: purple; width:200px; height:200px;"
+	}
+	if(mood == 'Loving')
+	{
+		box.style = "background-color: pink; width:200px; height:200px;"
+	}
+
+}
+</script>
+
+</html>
+

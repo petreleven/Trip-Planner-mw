@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src = "https://unpkg.com/showdown/dist/showdown.min.js"></script>
+	<style>
+		body{
+			display:flex;
+			flex-direction:column;
+		}
+		.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid;
+  border-color: #FF3D00 transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+	</style>
+
+
+
+</head>
+
+
+<body class="d-flex flex-column mb-3 bg-danger">
+	<h1>Trip Planner</h1>
+	<p>Welcome to trip planner, get to know all about where youre going before you reach your destination</p>
+	<label>Current Location</label>
+	<input id ="Current Location" placeholder="e.g Nairobi"></input>
+	<label>Destination</label>
+	<input id = "Destination" placeholder="e.g London"></input>
+	<label>Departure time</label>
+	<input id = "Departure Time" placeholder="e.g midnight,8:00pm"></input>
+	<button onclick="trigger()">Plan Trip!</button>
+	<br></br>
+	<span style="display:none;"class="loader" id="spinner"></span>
+	<div id="boxxy"></div>
+</body>
+</html>
+
+<script>
+	async function trigger()
+	{
+		console.log("Button clicked!")
+		let input1 = document.getElementById("Current Location")
+		let input2 = document.getElementById("Destination")
+		let input3 = document.getElementById("Departure Time")
+		let box = document.getElementById("boxxy")
+		let spinner = document.getElementById("spinner")
+		spinner.style.display = "block"
+
+		console.log(input1.value)
+		console.log(input2.value)
+		console.log(input3.value)
+
+
+		let currentLoc = input1.value
+		let dest = input2.value
+		let depTime = input3.value
+
+		let form = new FormData()
+		{
+			form.append("currentLoc",currentLoc)
+			form.append("dest",dest)
+			form.append("depTime",depTime)
+		}
+		let answer = await fetch("/receiveDestination",{"method":"post","body":form})
+		var converter = new showdown.Converter(),
+    	text = (await answer.json())["answer"],
+
+    	html = converter.makeHtml(text);
+		boxxy.insertAdjacentHTML("beforeend",html)
+		spinner.style.display = "none"
+	
+		
+	}
+
+</script>
